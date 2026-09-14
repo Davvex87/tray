@@ -1,9 +1,9 @@
 {
 	"name": "tray",
-	"url": "https://github.com/webview/tray",
+	"url": "https://github.com/Davvex87/tray",
 	"license": "MIT",
 	"tags": ["cpp", "hxcpp", "native"],
-	"description": "hxcpp externs for webview/tray: a cross-platform, DLL-less, system tray icon with a popup menu (Windows, macOS, Linux/AppIndicator)",
+	"description": "hxcpp externs for webview/tray to create a system tray icon with a popup menu, for Windows, MacOS and Linux, for usage in Haxe applications and services with ease.",
 	"version": "0.1.0",
 	"releasenote": "Initial release.",
 	"contributors": ["Davvex87"]
