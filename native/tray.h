@@ -24,6 +24,8 @@ static void tray_update(struct tray *tray);
 
 #if defined(TRAY_APPINDICATOR)
 
+#include <stdlib.h>
+#include <string.h>
 #include <gtk/gtk.h>
 #include <libappindicator/app-indicator.h>
 
@@ -66,11 +68,39 @@ static GtkMenuShell *_tray_menu(struct tray_menu *m) {
   return menu;
 }
 
+/* AppIndicator (StatusNotifierItem) takes an icon *theme name*, not a file
+ * path. If the icon looks like a path, point the indicator's icon theme path
+ * at its directory and use the bare file name (without extension) as the
+ * icon name. */
+static void _tray_set_icon(struct tray *tray) {
+  const char *icon = tray->icon ? tray->icon : "";
+  if (strchr(icon, '/') == NULL && strchr(icon, '.') == NULL) {
+    app_indicator_set_icon_full(indicator, icon, icon);
+    return;
+  }
+  char *abs = realpath(icon, NULL);
+  if (abs == NULL) {
+    app_indicator_set_icon_full(indicator, icon, icon);
+    return;
+  }
+  char *dir = g_path_get_dirname(abs);
+  char *name = g_path_get_basename(abs);
+  char *dot = strrchr(name, '.');
+  if (dot != NULL && dot != name) {
+    *dot = '\0';
+  }
+  app_indicator_set_icon_theme_path(indicator, dir);
+  app_indicator_set_icon_full(indicator, name, name);
+  g_free(name);
+  g_free(dir);
+  free(abs);
+}
+
 static int tray_init(struct tray *tray) {
   if (gtk_init_check(0, NULL) == FALSE) {
     return -1;
   }
-  indicator = app_indicator_new(TRAY_APPINDICATOR_ID, tray->icon,
+  indicator = app_indicator_new(TRAY_APPINDICATOR_ID, "",
                                 APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
   app_indicator_set_status(indicator, APP_INDICATOR_STATUS_ACTIVE);
   loop_result = 0;
@@ -84,7 +114,7 @@ static int tray_loop(int blocking) {
 }
 
 static void tray_update(struct tray *tray) {
-  app_indicator_set_icon(indicator, tray->icon);
+  _tray_set_icon(tray);
   // GTK is all about reference counting, so previous menu should be destroyed
   // here
   app_indicator_set_menu(indicator, GTK_MENU(_tray_menu(tray->menu)));

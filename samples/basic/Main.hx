@@ -6,7 +6,7 @@ class Main {
 
 	static function main()
 	{
-		var tray = new Tray(Sys.systemName() == "Windows" ? "icon.ico" : "icon.png", [
+		var tray = new Tray(Sys.systemName() == "Windows" ? "tray.ico" : "tray.png", [
 			TrayButton("Hello", _ -> Sys.println("Hello clicked")),
 			TrayToggle("Toggle me", false, item -> Sys.println('toggle -> ${item.checked}')),
 			TrayButton("Clicked: 0 times", item -> {

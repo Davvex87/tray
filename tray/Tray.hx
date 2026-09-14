@@ -37,7 +37,8 @@ class Tray
 		
 		- Windows expects an `.ico`;
 		- MacOS an image name resolvable by `NSImage.imageNamed:`;
-		- Linux an icon name or path.
+		- Linux a themed icon name, or a path to a PNG/SVG (its directory is
+		  registered as the indicator's icon theme path).
 
 		Call `update()` after changing it.
 	**/
