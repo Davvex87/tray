@@ -52,7 +52,7 @@ hx_tray_menu *hx_tray_menu_new(void)
 	return m;
 }
 
-static void menu_push(hx_tray_menu *menu, const char *text, int disabled, int checked, int id, hx_tray_menu *sub) {
+static void menu_push(hx_tray_menu *menu, const char *text, int disabled, int checked, int toggle, int id, hx_tray_menu *sub) {
 	if (menu == NULL || menu->finalized)
 		return;
 	
@@ -70,6 +70,7 @@ static void menu_push(hx_tray_menu *menu, const char *text, int disabled, int ch
 	it->text = hx_strdup(text ? text : "");
 	it->disabled = disabled;
 	it->checked = checked;
+	it->toggle = toggle;
 	it->cb = hx_tray_dispatch;
 	it->context = (void *)(intptr_t)id;
 	it->submenu = NULL;
@@ -78,14 +79,14 @@ static void menu_push(hx_tray_menu *menu, const char *text, int disabled, int ch
 	menu->count++;
 }
 
-void hx_tray_menu_add(hx_tray_menu *menu, const char *text, int disabled, int checked, int id)
+void hx_tray_menu_add(hx_tray_menu *menu, const char *text, int disabled, int checked, int toggle, int id)
 {
-	menu_push(menu, text, disabled, checked, id, NULL);
+	menu_push(menu, text, disabled, checked, toggle, id, NULL);
 }
 
-void hx_tray_menu_add_sub(hx_tray_menu *menu, const char *text, int disabled, int checked, int id, hx_tray_menu *submenu)
+void hx_tray_menu_add_sub(hx_tray_menu *menu, const char *text, int disabled, int checked, int toggle, int id, hx_tray_menu *submenu)
 {
-	menu_push(menu, text, disabled, checked, id, submenu);
+	menu_push(menu, text, disabled, checked, toggle, id, submenu);
 }
 
 static void menu_finalize(hx_tray_menu *menu)

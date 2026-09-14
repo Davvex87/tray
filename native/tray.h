@@ -12,6 +12,7 @@ struct tray_menu {
   char *text;
   int disabled;
   int checked;
+  int toggle; /* render as a checkable item (check box / tick) */
 
   void (*cb)(struct tray_menu *);
   void *context;
@@ -48,9 +49,11 @@ static GtkMenuShell *_tray_menu(struct tray_menu *m) {
         item = gtk_menu_item_new_with_label(m->text);
         gtk_menu_item_set_submenu(GTK_MENU_ITEM(item),
                                   GTK_WIDGET(_tray_menu(m->submenu)));
-      } else {
+      } else if (m->toggle) {
         item = gtk_check_menu_item_new_with_label(m->text);
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), !!m->checked);
+      } else {
+        item = gtk_menu_item_new_with_label(m->text);
       }
       gtk_widget_set_sensitive(item, !m->disabled);
       if (m->cb != NULL) {
@@ -70,6 +73,7 @@ static int tray_init(struct tray *tray) {
   indicator = app_indicator_new(TRAY_APPINDICATOR_ID, tray->icon,
                                 APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
   app_indicator_set_status(indicator, APP_INDICATOR_STATUS_ACTIVE);
+  loop_result = 0;
   tray_update(tray);
   return 0;
 }
@@ -86,7 +90,14 @@ static void tray_update(struct tray *tray) {
   app_indicator_set_menu(indicator, GTK_MENU(_tray_menu(tray->menu)));
 }
 
-static void tray_exit() { loop_result = -1; }
+static void tray_exit() {
+  loop_result = -1;
+  if (indicator != NULL) {
+    app_indicator_set_status(indicator, APP_INDICATOR_STATUS_PASSIVE);
+    g_object_unref(indicator);
+    indicator = NULL;
+  }
+}
 
 #elif defined(TRAY_APPKIT)
 

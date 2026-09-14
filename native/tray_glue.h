@@ -9,8 +9,8 @@ typedef struct hx_tray_menu hx_tray_menu;
 typedef void (*hx_tray_cb)(int id);
 
 hx_tray_menu *hx_tray_menu_new(void);
-void hx_tray_menu_add(hx_tray_menu *menu, const char *text, int disabled, int checked, int id);
-void hx_tray_menu_add_sub(hx_tray_menu *menu, const char *text, int disabled, int checked, int id, hx_tray_menu *submenu);
+void hx_tray_menu_add(hx_tray_menu *menu, const char *text, int disabled, int checked, int toggle, int id);
+void hx_tray_menu_add_sub(hx_tray_menu *menu, const char *text, int disabled, int checked, int toggle, int id, hx_tray_menu *submenu);
 
 // Only needed if a built menu is never passed to init/update
 void hx_tray_menu_free(hx_tray_menu *menu);

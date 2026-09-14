@@ -57,10 +57,10 @@ extern class TrayNative
 	static function menuNew():RawPointer<HxTrayMenu>;
 
 	@:native("hx_tray_menu_add")
-	static function menuAdd(menu:RawPointer<HxTrayMenu>, text:ConstCharStar, disabled:Int, checked:Int, id:Int):Void;
+	static function menuAdd(menu:RawPointer<HxTrayMenu>, text:ConstCharStar, disabled:Int, checked:Int, toggle:Int, id:Int):Void;
 
 	@:native("hx_tray_menu_add_sub")
-	static function menuAddSub(menu:RawPointer<HxTrayMenu>, text:ConstCharStar, disabled:Int, checked:Int, id:Int, submenu:RawPointer<HxTrayMenu>):Void;
+	static function menuAddSub(menu:RawPointer<HxTrayMenu>, text:ConstCharStar, disabled:Int, checked:Int, toggle:Int, id:Int, submenu:RawPointer<HxTrayMenu>):Void;
 
 	@:native("hx_tray_menu_free")
 	static function menuFree(menu:RawPointer<HxTrayMenu>):Void;

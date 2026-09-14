@@ -133,7 +133,15 @@ class Tray
 		if (blocking)
 			while (loop(true)) {}
 		else
-			mainEvent = haxe.MainLoop.add(() -> if (!loop(false)) mainEvent.stop());
+		{
+			mainEvent = haxe.MainLoop.add(() -> {
+				if (!loop(false) && mainEvent != null)
+				{
+					mainEvent.stop();
+					mainEvent = null;
+				}
+			});
+		}
 	}
 
 	/**
@@ -175,11 +183,12 @@ class Tray
 			var text = ConstCharStar.fromString(item.text);
 			var disabled = item.disabled ? 1 : 0;
 			var checked = item.checked ? 1 : 0;
+			var toggle = item.toggle ? 1 : 0;
 
 			if (item.submenu != null)
-				TrayNative.menuAddSub(native, text, disabled, checked, id, buildList(item.submenu));
+				TrayNative.menuAddSub(native, text, disabled, checked, toggle, id, buildList(item.submenu));
 			else
-				TrayNative.menuAdd(native, text, disabled, checked, id);
+				TrayNative.menuAdd(native, text, disabled, checked, toggle, id);
 		}
 
 		return native;
