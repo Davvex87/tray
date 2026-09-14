@@ -1,0 +1,4 @@
+tray
+-lib tray
+--cpp bin
+--no-output

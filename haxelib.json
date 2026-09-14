@@ -1,0 +1,10 @@
+{
+	"name": "tray",
+	"url": "https://github.com/webview/tray",
+	"license": "MIT",
+	"tags": ["cpp", "hxcpp", "native"],
+	"description": "hxcpp externs for webview/tray: a cross-platform, DLL-less, system tray icon with a popup menu (Windows, macOS, Linux/AppIndicator)",
+	"version": "0.1.0",
+	"releasenote": "Initial release.",
+	"contributors": ["Davvex87"]
+}
