@@ -1,3 +1,4 @@
+import sys.FileSystem;
 import tray.Tray;
 import tray.TrayMenuDef;
 
@@ -6,7 +7,11 @@ class Main {
 
 	static function main()
 	{
-		var tray = new Tray(Sys.systemName() == "Windows" ? "tray.ico" : "tray.png", [
+		final ICON_FILE = Sys.systemName() == "Windows" ? "tray.ico" : "tray.png";
+		if (!FileSystem.exists(ICON_FILE))
+			throw 'Icon file "$ICON_FILE" not found. Please copy it from the samples/basic/ directory to the current working directory.';
+		
+		var tray = new Tray(ICON_FILE, [
 			TrayButton("Hello", _ -> Sys.println("Hello clicked")),
 			TrayToggle("Toggle me", false, item -> Sys.println('toggle -> ${item.checked}')),
 			TrayButton("Clicked: 0 times", item -> {
